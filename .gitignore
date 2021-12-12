@@ -1,0 +1,5 @@
+.amlignore*
+*amltmp
+data
+kaggle.json
+config.json
