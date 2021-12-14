@@ -1,0 +1,6 @@
+confuse==1.6.0
+icecream==2.1.1
+plotly==5.3.1
+kaleido==0.2.1
+scikit-surprise==1.1.1
+kaggle==1.5.12

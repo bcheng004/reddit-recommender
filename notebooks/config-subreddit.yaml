@@ -1,0 +1,7 @@
+folder_paths:
+    data_folder_name: 'data'
+    plot_output_folder_name: 'plotly_output'
+azureml:
+    experiment_name: 'redditrecsys'
+    environment_name: 'reddit-env'
+    dataset_name: 'reddit_df'
