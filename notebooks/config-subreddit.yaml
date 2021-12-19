@@ -5,3 +5,7 @@ azureml:
     experiment_name: 'redditrecsys'
     environment_name: 'reddit-env'
     dataset_name: 'reddit_df'
+surprise:
+    random_state: 42
+    verbose_bool: False
+    test_size: 0.2
