@@ -5,6 +5,10 @@ azureml:
     experiment_name: 'redditrecsys'
     environment_name: 'reddit-env'
     dataset_name: 'reddit_df'
+    compute_cluster: 
+        name: 'cpu-cluster'
+        vm_size: "STANDARD_D2_V2"
+        max_nodes: 4
 surprise:
     random_state: 42
     verbose_bool: False
