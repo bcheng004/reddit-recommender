@@ -16,30 +16,36 @@ def main():
     ### argparse
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        '--n_cltr_u',
+        '--k',
         type=int,
-        default=3,
-        help='Number of user clusters. Default is 3'
+        default=40,
+        help='''The (max) number of neighbors to take into account for
+        aggregation (see :ref:`this note <actual_k_note>`). Default is 
+        40'''
     )
     parser.add_argument(
-        '--n_cltr_i',
+        '--min_k',
         type=int,
-        default=3,
-        help='Number of item clusters. Default is 3'
+        default=1,
+        help='''The minimum number of neighbors to take into account for
+        aggregation. If there are not enough neighbors, the neighbor
+        aggregation is set to zero (so the prediction ends up being
+        equivalent to the mean :math: $\mu_u$ or :math: $\mu_i$). Default is
+        1.'''
     )
     parser.add_argument(
-        '--n_epochs',
-        type=int,
-        default=20,
-        help='Number of iteration of the optimization loop. Default is 20'
+        '--verbose',
+        type=bool,
+        default=True,
+        help='''Whether to print trace messages of bias estimation,
+        similarity, etc.  Default is True.'''
     )
     args = parser.parse_args()
     ### config
     config = confuse.Configuration('RecommenderTrain')
     config.set_file('config-subreddit.yaml')
-    random_state = config['surprise']['random_state'].get()
-    verbose_bool = config['surprise']['verbose_bool'].get()
     dataset_name = config['azureml']['dataset_name'].get()
+    model_output_folder = config['azureml']['model_output_folder'].get()
     ### azureml Workspace, Dataset
     ws = run.experiment.workspace
     subreddit_df = Dataset.get_by_name(ws,name=dataset_name).to_pandas_dataframe()
@@ -48,17 +54,11 @@ def main():
     reader = surprise.Reader(rating_scale=(min_count,max_count))
     full_data = surprise.Dataset.load_from_df(subreddit_df,reader)
     ### model fit
-    model = CoClustering(
-        n_cltr_u=args.n_cltr_u,
-        n_cltr_i=args.n_cltr_i,
-        n_epochs=args.n_epochs,
-        random_state=random_state,
-        verbose=verbose_bool
-    )
+    model = KNNWithZScore(k=args.k, min_k=args.min_k, verbose=args.verbose)
     model.fit(full_data.build_full_trainset())
     ### save model
-    os.makedirs("outputs", exist_ok=True)
-    joblib.dump(model,"outputs/model.joblib")
+    os.makedirs(model_output_folder, exist_ok=True)
+    joblib.dump(model,f"{model_output_folder}/model.joblib")
 
 if __name__ == '__main__':
     main()

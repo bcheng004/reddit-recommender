@@ -9,6 +9,13 @@ azureml:
         name: 'cpu-cluster'
         vm_size: "STANDARD_D2_V2"
         max_nodes: 4
+    model_output_folder: 'outputs'
+    model_name: "subreddit-rec"
+    inference_script_path: "inference/predict.py"
+    aciservice:
+        endpoint_name: "subreddit-api"
+        cpu_cores: 1
+        memory_gb: 1
 surprise:
     random_state: 42
     verbose_bool: False
