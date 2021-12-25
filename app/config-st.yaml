@@ -1,0 +1,8 @@
+azureml:
+    dataset_name: 'reddit_df'
+    aciservice:
+        endpoint_name: "subreddit-api"
+streamlit:
+    page_title: "Subreddit Recommender System"
+    page_icon: ":technologist:"
+    server_port: 8080
